@@ -21,17 +21,17 @@ create a yaml file (by default the library looks for `datasets.yaml`) and start 
 
 ```yaml
 datasets:
-  - path: ParsiAI/FarsInstruct
+  - path: facebook/recycling_the_web
 ```
 
 you can add as many Hugginface 🤗 datasets as you want:
 
 ```yaml
 datasets:
-  - path: ParsiAI/FarsInstruct
-  - path: ParsiAI/FarsInstruct
-  - path: ParsiAI/FarsInstruct
-  - path: ParsiAI/FarsInstruct
+  - path: facebook/recycling_the_web
+  - path: Lk123/InfoSeek
+  - path: ...
+  - path: ...
 ```
 
 you can also load your own custom dataset files, supported formats are:
@@ -52,10 +52,9 @@ for each dataset you can target an array of specific columns to be returned with
 
 ```yaml
 datasets:
-  - path: ParsiAI/FarsInstruct
+  - path: MathLLMs/MathVision
     columns:
-      - inputs
-      - outputs
+      - questions
 
   - path: community-datasets/farsi_news
     columns:
