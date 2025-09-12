@@ -21,7 +21,7 @@ class DSIterCollection:
             
             ds = yaml.safe_load(f)
             for d in ds.get('datasets'):
-                self.datasets.append(DSIterDatasetItem(path=d.get('path'), columns=d.get('columns')))
+                self.datasets.append(DSIterDatasetItem(path=d.get('path'), columns=d.get('columns') or []))
 
             logger.info(f'AggregatedDataset initialized with {len(self.datasets)} datasets')
         
