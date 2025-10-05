@@ -1,6 +1,6 @@
 [project]
 name = "dsiter"
-version = "0.1.0"
+version = "0.1.2"
 description = "A library for iterating over aggregated datasets from HuggingFace and local CSV files"
 readme = "README.md"
 requires-python = ">=3.9"
