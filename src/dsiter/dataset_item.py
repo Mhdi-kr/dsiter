@@ -1,4 +1,4 @@
-from datasets import load_dataset
+from datasets import load_dataset, DatasetDict
 from .utils.common import calculate_num_rows, logger
 
 
@@ -22,21 +22,26 @@ class DSIterDatasetItem:
         Returns:
             HuggingFace dataset object
         """
-        logger.info(f'AggregatedDataset loading {self.path}')
-        
-        if self.is_local():
-            hf_dataset = load_dataset("csv", data_files=self.path, keep_in_memory=False)
+        logger.info(f'DSIterDatasetItem loading {self.path}')
+        try:
+            if self.is_local():
+                hf_dataset = load_dataset("csv", data_files=self.path, keep_in_memory=False)
+                row_count = calculate_num_rows(hf_dataset)
+                self.num_rows = row_count
+                logger.info(f'DSIterDatasetItem loaded local {self.path}, {row_count} rows')
+                
+                return hf_dataset
+            
+            hf_dataset = load_dataset(self.path, streaming=True, keep_in_memory=False)
             row_count = calculate_num_rows(hf_dataset)
-            logger.info(f'AggregatedDataset loaded local {self.path}, {row_count} rows')
             self.num_rows = row_count
+            logger.info(f'DSIterDatasetItem loaded {self.path}, {row_count} rows')
             
             return hf_dataset
-        
-        hf_dataset = load_dataset(self.path, streaming=True, keep_in_memory=False)
-        row_count = calculate_num_rows(hf_dataset)
-        self.num_rows = row_count
-        logger.info(f'AggregatedDataset loaded {self.path}, {row_count} rows')
-        return hf_dataset
+
+        except Exception as e:
+            logger.info(f'DSIterDatasetItem loading went wrong! : {str(e)}')
+            return DatasetDict()
 
     def is_local(self) -> bool:
         """Check if the dataset is a local file.
