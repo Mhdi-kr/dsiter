@@ -25,14 +25,14 @@ class DSIterDatasetItem:
         logger.info(f'AggregatedDataset loading {self.path}')
         
         if self.is_local():
-            hf_dataset = load_dataset("csv", data_files=self.path, num_proc=32, keep_in_memory=False)
+            hf_dataset = load_dataset("csv", data_files=self.path, keep_in_memory=False)
             row_count = calculate_num_rows(hf_dataset)
             logger.info(f'AggregatedDataset loaded local {self.path}, {row_count} rows')
             self.num_rows = row_count
             
             return hf_dataset
         
-        hf_dataset = load_dataset(self.path, num_proc=32, keep_in_memory=False)
+        hf_dataset = load_dataset(self.path, streaming=True, keep_in_memory=False)
         row_count = calculate_num_rows(hf_dataset)
         self.num_rows = row_count
         logger.info(f'AggregatedDataset loaded {self.path}, {row_count} rows')
