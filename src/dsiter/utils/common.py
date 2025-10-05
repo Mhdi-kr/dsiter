@@ -1,11 +1,16 @@
 import logging
-from datasets import DatasetDict
+from typing import Union
+from datasets import DatasetDict, IterableDatasetDict
 
 logger = logging.getLogger('dsiter')
 
-def calculate_num_rows(d: DatasetDict):
+def calculate_num_rows(d: Union[DatasetDict, IterableDatasetDict]):
     result = 0
-    for _, row_count in d.num_rows.items():
-        result += row_count
     
+    if isinstance(d, IterableDatasetDict):
+        result = sum(1 for _ in d)
+    
+    if isinstance(d, DatasetDict):
+        result = len(d)
+
     return result
